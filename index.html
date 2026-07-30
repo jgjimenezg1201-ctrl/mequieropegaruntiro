@@ -32,7 +32,6 @@
       overflow-x: hidden;
     }
 
-    /* Patrón sutil de fondo en tonos morados/lilas */
     body::before {
       content: "";
       position: fixed;
@@ -46,7 +45,6 @@
       z-index: -1;
     }
 
-    /* Frase superior con tono violeta profundo */
     .phrase-header {
       font-family: 'Playfair Display', serif;
       font-style: italic;
@@ -60,7 +58,6 @@
       text-shadow: 0 1px 2px rgba(255, 255, 255, 0.8);
     }
 
-    /* Tarjeta principal con borde suave lila/rosa */
     .card {
       background: rgba(255, 255, 255, 0.95);
       backdrop-filter: blur(8px);
@@ -75,7 +72,6 @@
       transition: all 0.3s ease;
     }
 
-    /* Imagen Principal (Propuesta / Morat) */
     .main-image-wrapper {
       width: 100%;
       border-radius: 18px;
@@ -97,7 +93,6 @@
       display: block;
     }
 
-    /* Título / Pregunta con degradado rosa-morado */
     .card h1 {
       background: linear-gradient(135deg, #7b2cbf 0%, #ff4d6d 100%);
       -webkit-background-clip: text;
@@ -108,7 +103,6 @@
       line-height: 1.3;
     }
 
-    /* Detalles de la cita en caja lila clara */
     .details-box {
       background: #f8f0fc;
       border: 1.5px dashed #c77dff;
@@ -143,7 +137,6 @@
       margin-right: 4px;
     }
 
-    /* Botones */
     .buttons-container {
       display: flex;
       justify-content: center;
@@ -161,14 +154,13 @@
       border-radius: 50px;
       border: none;
       cursor: pointer;
-      transition: transform 0.2s ease, box-shadow 0.2s ease, background-color 0.2s ease;
+      transition: background-color 0.2s ease, box-shadow 0.2s ease;
       display: inline-flex;
       align-items: center;
       justify-content: center;
       gap: 8px;
     }
 
-    /* Botón "Sí" con degradado Violeta -> Rosa */
     .btn-yes {
       background: linear-gradient(135deg, #7b2cbf 0%, #ff4d6d 100%);
       color: #ffffff;
@@ -189,10 +181,10 @@
       padding: 12px 22px;
       font-size: 0.95rem;
       border: 1px solid #ced4da;
-      z-index: 10;
+      z-index: 100;
+      transition: top 0.15s ease, left 0.15s ease;
     }
 
-    /* Reproductor de música inferior en tono violeta oscuro */
     .player-widget {
       margin-top: 22px;
       background: #240046;
@@ -266,7 +258,6 @@
       background: rgba(255, 255, 255, 0.3);
     }
 
-    /* Contenido tras aceptar (Oculto al inicio) */
     .success-screen {
       display: none;
       animation: fadeIn 0.5s ease forwards;
@@ -298,7 +289,6 @@
       margin-top: 10px;
     }
 
-    /* Confeti de corazones decorativo */
     .heart-badge {
       font-size: 3rem;
       margin-bottom: 10px;
@@ -314,22 +304,18 @@
 </head>
 <body>
 
-  <!-- Audio de fondo (Reemplaza musica.mp3 por la canción "La Policía" de Morat) -->
+  <!-- Audio con extensión MP3 corregida -->
   <audio id="bg-music" loop>
     <source src="musica.MP3" type="audio/mpeg">
   </audio>
 
-  <!-- Frase principal -->
   <p class="phrase-header">
     "Y sin pensarlo, nos escapamos,<br>para robarle a la vida un día..."
   </p>
 
-  <!-- Tarjeta interactiva -->
   <div class="card">
     
-    <!-- PANTALLA PRINCIPAL DE INVITACIÓN -->
     <div id="invitation-screen">
-      <!-- Imagen principal (Propuesta de Morat) -->
       <div class="main-image-wrapper">
         <img src="imagen.jpg" alt="Morat - Propuesta Especial">
       </div>
@@ -351,17 +337,16 @@
         </div>
       </div>
 
-      <div class="buttons-container">
+      <div class="buttons-container" id="buttons-container">
         <button class="btn btn-yes" onclick="acceptInvitation()">
           ¡Sí, me encantaría! ⭐
         </button>
-        <button class="btn btn-no" id="btn-no" onmouseover="moveNoButton()" onclick="moveNoButton()">
+        <button class="btn btn-no" id="btn-no" onmouseover="moveNoButton()" onclick="moveNoButton()" ontouchstart="moveNoButton()">
           No
         </button>
       </div>
     </div>
 
-    <!-- PANTALLA DE ÉXITO (SE MUESTRA AL DECIR SÍ) -->
     <div id="success-screen" class="success-screen">
       <div class="heart-badge">💖</div>
       <h1>¡Sabía que dirías que sí!</h1>
@@ -375,7 +360,6 @@
 
   </div>
 
-  <!-- Widget de audio elegante abajo -->
   <div class="player-widget">
     <div class="player-info">
       <div class="player-icon-box">
@@ -392,33 +376,34 @@
   </div>
 
   <script>
-    // Función para el botón esquivo "No"
+    // Función arreglada para calcular bien la posición dentro de la pantalla
     function moveNoButton() {
       const btnNo = document.getElementById('btn-no');
       
-      // Obtener dimensiones de la pantalla
-      const padding = 20;
-      const maxX = window.innerWidth - btnNo.offsetWidth - padding;
-      const maxY = window.innerHeight - btnNo.offsetHeight - padding;
+      const btnWidth = btnNo.offsetWidth || 80;
+      const btnHeight = btnNo.offsetHeight || 40;
 
-      const randomX = Math.max(padding, Math.floor(Math.random() * maxX));
-      const randomY = Math.max(padding, Math.floor(Math.random() * maxY));
+      const maxX = window.innerWidth - btnWidth - 30;
+      const maxY = window.innerHeight - btnHeight - 30;
+
+      const randomX = Math.max(20, Math.floor(Math.random() * maxX));
+      const randomY = Math.max(20, Math.floor(Math.random() * maxY));
 
       btnNo.style.position = 'fixed';
-      btnNo.style.left = `${randomX}px`;
-      btnNo.style.top = `${randomY}px`;
+      btnNo.style.left = randomX + 'px';
+      btnNo.style.top = randomY + 'px';
     }
 
-    // Acción al dar clic en "Sí"
     function acceptInvitation() {
       document.getElementById('invitation-screen').style.display = 'none';
       document.getElementById('success-screen').style.display = 'block';
 
-      // Iniciar la música automáticamente
+      const btnNo = document.getElementById('btn-no');
+      if (btnNo) btnNo.style.display = 'none';
+
       playMusic();
     }
 
-    // Reproductor de Música
     const audio = document.getElementById('bg-music');
     const musicIcon = document.getElementById('music-icon');
 
@@ -427,7 +412,7 @@
         musicIcon.classList.remove('fa-play');
         musicIcon.classList.add('fa-pause');
       }).catch(err => {
-        console.log("El navegador bloqueó el autoplay. El usuario debe interactuar primero.");
+        console.log("Autoplay bloqueado por el navegador.");
       });
     }
 
